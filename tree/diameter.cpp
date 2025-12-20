@@ -53,6 +53,7 @@ int main() {
     vector<int> ans;
     diameter(a, ans);
     int temp = INT_MIN;
+    
     for (int i =0; i<ans.size(); i++) {
         if (temp<ans[i]) {
             temp = ans[i];
