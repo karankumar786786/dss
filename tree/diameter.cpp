@@ -2,6 +2,7 @@
 #include <climits>
 #include <cstddef>
 #include <iostream>
+#include <vector>
 using namespace std;
 
 class Node {
@@ -12,37 +13,24 @@ public:
   Node(int value) { this->value = value; }
 };
 
-void display(Node *root) {
-  if (root == NULL)
-    return;
-  cout << root->value << "    ";
-  display(root->left);
-  display(root->right);
-}
-
-int Sum(Node* root){
-  if (root == NULL) {
+int height(Node* root){
+    if (root == nullptr) {
     return 0;
-  }
-  return root->value + Sum(root->left) + Sum(root->right);
+    };
+    return 1 + max(height(root->left),height(root->right));
 }
 
-int size(Node* root){
-  if(root == NULL) return 0;
-  return 1 + size(root->left) + size(root->right);
+void diameter(Node* root,vector<int>& ans){
+    if (root == NULL) {
+        return;
+    }
+    int left = height(root->left);
+    int right = height(root->right);
+    ans.push_back(left+right);
+    diameter(root->left, ans);
+    diameter(root->right, ans);
 }
-int maxi(Node* root){
-  if (root == NULL) {
-    return INT_MIN;
-  };
-  return max(root->value,max(maxi(root->left),maxi(root->right)));
-}
-int product(Node* root){
-  if (root == NULL) {
-    return  1;
-  };
-  return root->value*product(root->left)*product(root->right);
-}
+
 
 int main() {
   Node *a = new Node(1);
@@ -62,10 +50,15 @@ int main() {
   c->right = g;
   d->left = h;
   d->right = i;
-  display(a);
-  cout<<Sum(a)<<endl;
-  cout<<size(a)<<endl;
-  cout<<maxi(a)<<endl;
-  cout<<product(a)<<endl;
+    vector<int> ans;
+    diameter(a, ans);
+    int temp = INT_MIN;
+    for (int i =0; i<ans.size(); i++) {
+        if (temp<ans[i]) {
+            temp = ans[i];
+        }
+    };
+    cout<<temp;
+
   return 0;
 }
